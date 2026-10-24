@@ -27,13 +27,13 @@ export function LegalPage({ title, children }: { title: string; children: React.
         </div>
 
         <nav className="mt-12 flex flex-wrap gap-x-4 border-t border-gray-200 pt-6 text-sm text-gray-500">
-          <Link href="/terms" className="inline-flex min-h-11 items-center hover:text-gray-900">
+          <Link href="/terms" className="inline-flex min-h-11 min-w-11 items-center justify-center px-1 hover:text-gray-900">
             Terms
           </Link>
-          <Link href="/privacy" className="inline-flex min-h-11 items-center hover:text-gray-900">
+          <Link href="/privacy" className="inline-flex min-h-11 min-w-11 items-center justify-center px-1 hover:text-gray-900">
             Privacy
           </Link>
-          <Link href="/login" className="inline-flex min-h-11 items-center hover:text-gray-900">
+          <Link href="/login" className="inline-flex min-h-11 min-w-11 items-center justify-center px-1 hover:text-gray-900">
             Log in
           </Link>
         </nav>
