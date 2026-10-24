@@ -9,6 +9,16 @@ export type Zone = {
 
 export const ZONE_COLUMNS = "id, name, center_lat, center_lng, radius_km, created_at";
 
+/** Ensures numeric columns are numbers, whatever the driver returned. */
+export function toZone(z: Zone): Zone {
+  return {
+    ...z,
+    center_lat: Number(z.center_lat),
+    center_lng: Number(z.center_lng),
+    radius_km: Number(z.radius_km),
+  };
+}
+
 export type Product = {
   id: string;
   name: string;
@@ -29,6 +39,29 @@ export function toProducts(rows: unknown[]): Product[] {
     price: Number(p.price),
     quantity: Number(p.quantity),
     zone_ids: (product_zones ?? []).map((pz) => pz.zone_id),
+  }));
+}
+
+export type Order = {
+  id: string;
+  quantity: number;
+  address: string | null;
+  lat: number;
+  lng: number;
+  created_at: string;
+  product: { name: string; price: number } | null;
+  zone: { name: string } | null;
+};
+
+export const ORDER_COLUMNS =
+  "id, quantity, address, lat, lng, created_at, product:products(name, price), zone:zones(name)";
+
+type OrderRow = Omit<Order, "product"> & { product: { name: string; price: number | string } | null };
+
+export function toOrders(rows: unknown[]): Order[] {
+  return (rows as OrderRow[]).map((o) => ({
+    ...o,
+    product: o.product ? { name: o.product.name, price: Number(o.product.price) } : null,
   }));
 }
 

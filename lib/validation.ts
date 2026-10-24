@@ -94,6 +94,49 @@ export function validateProduct(input: ProductInput):
   return { ok: true, value: { name, price: price as number, quantity: quantity as number, zoneIds } };
 }
 
+export const OUTSIDE_ALL_ZONES = "This address is outside all delivery zones.";
+export const OUTSIDE_PRODUCT_ZONES =
+  "This address is outside the zones where this product is available.";
+
+export type OrderInput = {
+  productId: string;
+  quantity: string;
+  lat: number | null;
+  lng: number | null;
+  address: string;
+};
+export type OrderErrors = Partial<Record<"product" | "quantity" | "point" | "address", string>>;
+
+/** Shape checks only; stock and zone rules need the database and run in the server action. */
+export function validateOrder(input: OrderInput):
+  | { ok: true; value: { productId: string; quantity: number; lat: number; lng: number; address: string | null } }
+  | { ok: false; errors: OrderErrors } {
+  const errors: OrderErrors = {};
+  const quantity = typeof input.quantity === "string" ? parseInteger(input.quantity) : null;
+  const address = typeof input.address === "string" ? input.address.trim() : "";
+
+  if (!isUuid(input.productId)) errors.product = "Choose a product.";
+
+  if (quantity === null) errors.quantity = "Enter a whole number, e.g. 2.";
+  else if (quantity <= 0) errors.quantity = "Quantity must be at least 1.";
+
+  if (!isValidLatLng(input.lat, input.lng)) errors.point = "Tap the map to set the delivery address.";
+
+  if (address.length > 300) errors.address = "Keep the address note under 300 characters.";
+
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  return {
+    ok: true,
+    value: {
+      productId: input.productId,
+      quantity: quantity as number,
+      lat: input.lat as number,
+      lng: input.lng as number,
+      address: address || null,
+    },
+  };
+}
+
 const mad = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export function formatMAD(amount: number): string {
