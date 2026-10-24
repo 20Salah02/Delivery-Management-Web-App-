@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { NETWORK_ERROR, friendlyAuthError } from "@/lib/auth-errors";
-import { Divider, Field, FormMessage, SubmitButton } from "./fields";
+import { Divider, Field, FormMessage, SubmitButton } from "@/components/ui/fields";
 import { GoogleButton } from "./GoogleButton";
 
 const TERMS_ERROR = "Please agree to the Terms and Privacy Policy to continue.";

@@ -5,6 +5,33 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --animate-fade-up: qd-fade-up 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-pop: qd-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes qd-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes qd-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -12,4 +39,65 @@ html {
 body {
   @apply bg-gray-50 text-gray-900;
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Map pin: drops in, then pulses like a live location dot. */
+.qd-pin {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+.qd-pin__dot {
+  position: absolute;
+  inset: 5px;
+  border-radius: 9999px;
+  background: var(--color-orange-500);
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.3);
+  animation: qd-drop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.qd-pin__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-orange-500);
+  animation: qd-pulse 1.6s ease-out infinite;
+}
+@keyframes qd-drop {
+  from {
+    transform: translateY(-24px) scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes qd-pulse {
+  from {
+    transform: scale(0.5);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.leaflet-container {
+  font-family: inherit;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
