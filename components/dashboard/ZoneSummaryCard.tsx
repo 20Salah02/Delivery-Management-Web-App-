@@ -19,7 +19,7 @@ export function ZoneSummaryCard({
           📍
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold break-words">{zone.name}</h3>
+          <h3 className="font-bold wrap-anywhere">{zone.name}</h3>
           <p className="text-sm text-gray-500">{formatKm(zone.radius_km)} radius</p>
         </div>
         <span className="shrink-0 rounded-full bg-gray-900 px-3 py-1 text-xs font-bold text-white">

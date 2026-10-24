@@ -27,7 +27,7 @@ export function ProductList({ products, zones }: { products: Product[]; zones: Z
           {products.map((product, i) => (
             <li
               key={product.id}
-              className="animate-fade-up"
+              className="min-w-0 animate-fade-up"
               style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}
             >
               <ProductCard
@@ -62,7 +62,7 @@ function ProductCard({
           {product.name.charAt(0).toUpperCase()}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold break-words">{product.name}</h3>
+          <h3 className="font-bold wrap-anywhere">{product.name}</h3>
           <p className="mt-0.5 text-lg font-extrabold tracking-tight text-gray-900">
             {formatMAD(product.price)}
           </p>

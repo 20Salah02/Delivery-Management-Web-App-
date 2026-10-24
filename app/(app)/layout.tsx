@@ -11,7 +11,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
           <Link
             href="/"
-            className="flex shrink-0 items-center gap-2 rounded-xl font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-orange-500"
+            className="flex min-h-11 shrink-0 items-center gap-2 rounded-xl font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-orange-500"
           >
             <span aria-hidden="true" className="flex size-9 items-center justify-center rounded-xl bg-orange-500 text-lg">
               🛵

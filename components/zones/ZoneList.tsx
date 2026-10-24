@@ -25,7 +25,7 @@ export function ZoneList({ zones, onShow }: { zones: Zone[]; onShow: (zone: Zone
           {zones.map((zone, i) => (
             <li
               key={zone.id}
-              className="animate-fade-up"
+              className="min-w-0 animate-fade-up"
               style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}
             >
               <ZoneCard zone={zone} onShow={() => onShow(zone)} />
@@ -48,7 +48,7 @@ function ZoneCard({ zone, onShow }: { zone: Zone; onShow: () => void }) {
           📍
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold break-words">{zone.name}</h3>
+          <h3 className="font-bold wrap-anywhere">{zone.name}</h3>
           <p className="mt-0.5 font-mono text-xs text-gray-500">
             {formatCoords(zone.center_lat, zone.center_lng)}
           </p>

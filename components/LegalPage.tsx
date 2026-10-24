@@ -22,7 +22,7 @@ export function LegalPage({ title, children }: { title: string; children: React.
         <h1 className="mt-8 text-3xl font-bold tracking-tight">{title}</h1>
         <p className="mt-2 text-sm text-gray-500">Last updated: {LEGAL_UPDATED}</p>
 
-        <div className="mt-8 space-y-4 leading-relaxed break-words text-gray-700 [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-gray-900 [&_li]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1">
+        <div className="mt-8 space-y-4 leading-relaxed wrap-anywhere text-gray-700 [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-gray-900 [&_li]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1">
           {children}
         </div>
 

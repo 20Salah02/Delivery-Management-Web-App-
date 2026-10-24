@@ -53,7 +53,7 @@ function GettingStarted({ zones, products, orders }: { zones: number; products: 
               </span>
               <span className="min-w-0">
                 <span className={`block font-semibold ${step.done ? "text-gray-400 line-through" : ""}`}>{step.title}</span>
-                <span className="block text-sm break-words text-gray-500">{step.text}</span>
+                <span className="block text-sm wrap-anywhere text-gray-500">{step.text}</span>
               </span>
             </Link>
           </li>
@@ -116,7 +116,7 @@ export function DashboardView({ zones, products, orders }: { zones: Zone[]; prod
             </h2>
             <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
               {zones.map((zone, i) => (
-                <li key={zone.id} className="animate-fade-up" style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}>
+                <li key={zone.id} className="min-w-0 animate-fade-up" style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}>
                   <ZoneSummaryCard
                     zone={zone}
                     products={products.filter((p) => p.zone_ids.includes(zone.id))}

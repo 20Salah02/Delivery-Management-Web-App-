@@ -120,7 +120,7 @@ export function FormMessage({
     <p
       id={id}
       role={kind === "error" ? "alert" : "status"}
-      className={`animate-pop rounded-2xl border px-4 py-3 text-sm font-medium break-words ${styles}`}
+      className={`animate-pop rounded-2xl border px-4 py-3 text-sm font-medium wrap-anywhere ${styles}`}
     >
       {children}
     </p>

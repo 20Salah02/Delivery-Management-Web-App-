@@ -21,7 +21,7 @@ export function OrderList({ orders }: { orders: Order[] }) {
           {orders.map((order, i) => (
             <li
               key={order.id}
-              className="animate-fade-up"
+              className="min-w-0 animate-fade-up"
               style={{ animationDelay: `${Math.min(i, 8) * 50}ms` }}
             >
               <OrderCard order={order} />
@@ -45,7 +45,7 @@ export function OrderCard({ order }: { order: Order }) {
           🛵
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold break-words">
+          <h3 className="font-bold wrap-anywhere">
             {productName} <span className="font-semibold text-gray-400">× {order.quantity}</span>
           </h3>
           <p className="mt-0.5 text-xs text-gray-500">
@@ -73,7 +73,7 @@ export function OrderCard({ order }: { order: Order }) {
         {order.address && (
           <div className="flex justify-between gap-3">
             <dt className="shrink-0 text-gray-500">Note</dt>
-            <dd className="min-w-0 text-right break-words text-gray-700">{order.address}</dd>
+            <dd className="min-w-0 text-right wrap-anywhere text-gray-700">{order.address}</dd>
           </div>
         )}
       </dl>

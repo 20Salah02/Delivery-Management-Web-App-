@@ -124,7 +124,7 @@ export function ProductForm({ zones }: { zones: Zone[] }) {
           />
         </div>
 
-        <fieldset className="relative" aria-describedby={errors.zones ? "zones-error" : undefined}>
+        <fieldset className="relative min-w-0" aria-describedby={errors.zones ? "zones-error" : undefined}>
           <legend className="flex min-h-11 items-center text-sm font-semibold text-gray-800">
             Available in&nbsp;
             <span className="font-normal text-gray-500">
