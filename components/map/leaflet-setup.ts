@@ -24,6 +24,15 @@ export const pickedPinIcon = L.divIcon({
   popupAnchor: [0, -14],
 });
 
+/** Small dot for existing orders. */
+export const orderDotIcon = L.divIcon({
+  className: "",
+  html: '<span class="qd-order-dot"></span>',
+  iconSize: [16, 16],
+  iconAnchor: [8, 8],
+  popupAnchor: [0, -8],
+});
+
 export function isDesktopPointer(): boolean {
   return window.matchMedia("(min-width: 768px) and (pointer: fine)").matches;
 }

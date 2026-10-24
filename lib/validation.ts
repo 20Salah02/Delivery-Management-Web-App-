@@ -150,3 +150,17 @@ export function formatKm(km: number): string {
 export function formatCoords(lat: number, lng: number): string {
   return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 }
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "Africa/Casablanca",
+});
+
+/** Fixed time zone so server and client render the same text. */
+export function formatDate(iso: string): string {
+  return dateFormat.format(new Date(iso));
+}

@@ -44,6 +44,8 @@ export function toProducts(rows: unknown[]): Product[] {
 
 export type Order = {
   id: string;
+  product_id: string;
+  zone_id: string;
   quantity: number;
   address: string | null;
   lat: number;
@@ -54,13 +56,15 @@ export type Order = {
 };
 
 export const ORDER_COLUMNS =
-  "id, quantity, address, lat, lng, created_at, product:products(name, price), zone:zones(name)";
+  "id, product_id, zone_id, quantity, address, lat, lng, created_at, product:products(name, price), zone:zones(name)";
 
 type OrderRow = Omit<Order, "product"> & { product: { name: string; price: number | string } | null };
 
 export function toOrders(rows: unknown[]): Order[] {
   return (rows as OrderRow[]).map((o) => ({
     ...o,
+    lat: Number(o.lat),
+    lng: Number(o.lng),
     product: o.product ? { name: o.product.name, price: Number(o.product.price) } : null,
   }));
 }

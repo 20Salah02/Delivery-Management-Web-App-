@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { ZonesManager } from "@/components/zones/ZonesManager";
 import { createClient } from "@/lib/supabase/server";
-import { ZONE_COLUMNS, type Zone } from "@/lib/types";
+import { ZONE_COLUMNS, toZone, type Zone } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Zones" };
 
@@ -22,7 +22,7 @@ async function ZonesContent() {
     );
   }
 
-  return <ZonesManager zones={(data ?? []) as Zone[]} />;
+  return <ZonesManager zones={((data ?? []) as Zone[]).map(toZone)} />;
 }
 
 function ZonesSkeleton() {
