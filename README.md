@@ -3,7 +3,7 @@
 A mobile-first web app to manage food delivery **zones**, **products** and **orders** on a map.
 An order is only accepted if its address falls inside a zone where the product is available.
 
-**Live demo:** https://YOUR-APP.vercel.app <!-- replace with your Vercel URL -->
+**Live demo:** https://quickdrop-salah.vercel.app <!-- replace with your Vercel URL -->
 
 ### Test credentials
 
