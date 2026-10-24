@@ -10,30 +10,60 @@ export function Field({
   label,
   hint,
   error,
+  suffix,
+  before,
+  after,
+  className = "",
   ...props
 }: {
   id: string;
   label: string;
   hint?: string;
   error?: string | null;
+  /** Short unit text shown inside the input, e.g. "MAD". */
+  suffix?: string;
+  /** Controls rendered beside the input, e.g. stepper buttons. */
+  before?: React.ReactNode;
+  after?: React.ReactNode;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy =
     [props["aria-describedby"], hintId, errorId].filter(Boolean).join(" ") || undefined;
+  const input = (
+    <input
+      id={id}
+      name={id}
+      className={`${inputBase} ${error ? inputBad : inputOk} ${suffix ? "pr-16" : ""} ${className}`}
+      {...props}
+      aria-invalid={error ? true : props["aria-invalid"]}
+      aria-describedby={describedBy}
+    />
+  );
   return (
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-gray-800">
         {label}
       </label>
-      <input
-        id={id}
-        name={id}
-        className={`${inputBase} ${error ? inputBad : inputOk}`}
-        {...props}
-        aria-invalid={error ? true : props["aria-invalid"]}
-        aria-describedby={describedBy}
-      />
+      {suffix || before || after ? (
+        <div className="flex items-stretch gap-2">
+          {before}
+          <div className="relative min-w-0 flex-1">
+            {input}
+            {suffix && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm font-semibold text-gray-400"
+              >
+                {suffix}
+              </span>
+            )}
+          </div>
+          {after}
+        </div>
+      ) : (
+        input
+      )}
       {hint && !error && (
         <p id={hintId} className="mt-1.5 text-xs text-gray-500">
           {hint}

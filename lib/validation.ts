@@ -53,6 +53,53 @@ export function validateZone(input: ZoneInput):
   };
 }
 
+export const MAX_PRICE = 1_000_000;
+export const MAX_QUANTITY = 100_000;
+
+/** Parses a whole number like "12"; returns null for anything else. */
+export function parseInteger(raw: string): number | null {
+  const value = raw.trim();
+  if (!/^\d+$/.test(value)) return null;
+  return Number(value);
+}
+
+export type ProductInput = { name: string; price: string; quantity: string; zoneIds: string[] };
+export type ProductErrors = Partial<Record<"name" | "price" | "quantity" | "zones", string>>;
+
+export function validateProduct(input: ProductInput):
+  | { ok: true; value: { name: string; price: number; quantity: number; zoneIds: string[] } }
+  | { ok: false; errors: ProductErrors } {
+  const errors: ProductErrors = {};
+  const name = typeof input.name === "string" ? input.name.trim() : "";
+  const priceRaw = typeof input.price === "string" ? input.price.trim().replace(",", ".") : "";
+  const price = /^\d+(\.\d{1,2})?$/.test(priceRaw) ? Number(priceRaw) : null;
+  const quantity = typeof input.quantity === "string" ? parseInteger(input.quantity) : null;
+  const zoneIds = Array.isArray(input.zoneIds) ? [...new Set(input.zoneIds)] : [];
+
+  if (!name) errors.name = "Give the product a name.";
+  else if (name.length > 100) errors.name = "Keep the name under 100 characters.";
+
+  if (price === null) errors.price = "Enter a price like 25 or 25.50 (max 2 decimals).";
+  else if (price < 0) errors.price = "Price can't be negative.";
+  else if (price > MAX_PRICE) errors.price = `Price can't exceed ${MAX_PRICE.toLocaleString("en-US")} MAD.`;
+
+  if (quantity === null) errors.quantity = "Enter a whole number, e.g. 10.";
+  else if (quantity <= 0) errors.quantity = "Quantity must be at least 1.";
+  else if (quantity > MAX_QUANTITY) errors.quantity = `Quantity can't exceed ${MAX_QUANTITY.toLocaleString("en-US")}.`;
+
+  if (zoneIds.length === 0) errors.zones = "Pick at least one zone where this product is available.";
+  else if (!zoneIds.every(isUuid)) errors.zones = "One of the selected zones is invalid.";
+
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  return { ok: true, value: { name, price: price as number, quantity: quantity as number, zoneIds } };
+}
+
+const mad = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+export function formatMAD(amount: number): string {
+  return `${mad.format(amount)} MAD`;
+}
+
 export function formatKm(km: number): string {
   return `${Number(km.toFixed(2))} km`;
 }
