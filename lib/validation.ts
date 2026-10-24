@@ -30,9 +30,15 @@ export function isUuid(value: unknown): value is string {
 export type ZoneInput = { name: string; radius: string; lat: number | null; lng: number | null };
 export type ZoneErrors = Partial<Record<"name" | "radius" | "point", string>>;
 
-export function validateZone(input: ZoneInput):
+/** Server actions can receive anything; treat non-objects as empty input. */
+function asRecord<T>(input: T): Partial<T> {
+  return input && typeof input === "object" ? input : {};
+}
+
+export function validateZone(raw: ZoneInput):
   | { ok: true; value: { name: string; radiusKm: number; lat: number; lng: number } }
   | { ok: false; errors: ZoneErrors } {
+  const input = asRecord(raw);
   const errors: ZoneErrors = {};
   const name = typeof input.name === "string" ? input.name.trim() : "";
   const radiusKm = typeof input.radius === "string" ? parseDecimal(input.radius) : null;
@@ -66,9 +72,10 @@ export function parseInteger(raw: string): number | null {
 export type ProductInput = { name: string; price: string; quantity: string; zoneIds: string[] };
 export type ProductErrors = Partial<Record<"name" | "price" | "quantity" | "zones", string>>;
 
-export function validateProduct(input: ProductInput):
+export function validateProduct(raw: ProductInput):
   | { ok: true; value: { name: string; price: number; quantity: number; zoneIds: string[] } }
   | { ok: false; errors: ProductErrors } {
+  const input = asRecord(raw);
   const errors: ProductErrors = {};
   const name = typeof input.name === "string" ? input.name.trim() : "";
   const priceRaw = typeof input.price === "string" ? input.price.trim().replace(",", ".") : "";
@@ -108,9 +115,10 @@ export type OrderInput = {
 export type OrderErrors = Partial<Record<"product" | "quantity" | "point" | "address", string>>;
 
 /** Shape checks only; stock and zone rules need the database and run in the server action. */
-export function validateOrder(input: OrderInput):
+export function validateOrder(raw: OrderInput):
   | { ok: true; value: { productId: string; quantity: number; lat: number; lng: number; address: string | null } }
   | { ok: false; errors: OrderErrors } {
+  const input = asRecord(raw);
   const errors: OrderErrors = {};
   const quantity = typeof input.quantity === "string" ? parseInteger(input.quantity) : null;
   const address = typeof input.address === "string" ? input.address.trim() : "";
@@ -128,7 +136,7 @@ export function validateOrder(input: OrderInput):
   return {
     ok: true,
     value: {
-      productId: input.productId,
+      productId: input.productId as string,
       quantity: quantity as number,
       lat: input.lat as number,
       lng: input.lng as number,

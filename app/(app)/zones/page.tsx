@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
+import { LoadError } from "@/components/ui/LoadError";
 import { ZonesManager } from "@/components/zones/ZonesManager";
 import { createClient } from "@/lib/supabase/server";
 import { ZONE_COLUMNS, toZone, type Zone } from "@/lib/types";
@@ -14,13 +15,7 @@ async function ZonesContent() {
     .select(ZONE_COLUMNS)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    return (
-      <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-        Couldn&apos;t load your zones. Refresh the page to try again.
-      </p>
-    );
-  }
+  if (error) return <LoadError what="zones" />;
 
   return <ZonesManager zones={((data ?? []) as Zone[]).map(toZone)} />;
 }

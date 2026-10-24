@@ -88,7 +88,7 @@ export function ProductForm({ zones }: { zones: Zone[] }) {
           error={errors.name}
         />
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
           <Field
             id="product-price"
             label="Price"
@@ -168,7 +168,7 @@ export function ProductForm({ zones }: { zones: Zone[] }) {
                   >
                     {checked && "✓"}
                   </span>
-                  <span className="truncate">{zone.name}</span>
+                  <span className="min-w-0 truncate">{zone.name}</span>
                 </label>
               );
             })}

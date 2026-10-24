@@ -134,3 +134,59 @@ create policy "orders_update_own" on public.orders
   );
 create policy "orders_delete_own" on public.orders
   for delete to authenticated using (user_id = (select auth.uid()));
+
+-- ---------------------------------------------------------------------------
+-- Order rules enforced in the database too, so a direct REST call with a
+-- valid user token can't bypass the server action's checks.
+-- ---------------------------------------------------------------------------
+
+create or replace function public.haversine_km(lat1 double precision, lng1 double precision,
+                                               lat2 double precision, lng2 double precision)
+returns double precision
+language sql immutable
+set search_path = ''
+as $$
+  select 2 * 6371 * asin(least(1, sqrt(
+    power(sin(radians(lat2 - lat1) / 2), 2) +
+    cos(radians(lat1)) * cos(radians(lat2)) * power(sin(radians(lng2 - lng1) / 2), 2)
+  )));
+$$;
+
+create or replace function public.validate_order()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+declare
+  z public.zones%rowtype;
+  stock integer;
+begin
+  select quantity into stock from public.products where id = new.product_id;
+  if stock is null then
+    raise exception 'Product not found' using errcode = 'foreign_key_violation';
+  end if;
+  if new.quantity > stock then
+    raise exception 'Quantity exceeds stock (%)', stock using errcode = 'check_violation';
+  end if;
+
+  if not exists (
+    select 1 from public.product_zones pz
+    where pz.product_id = new.product_id and pz.zone_id = new.zone_id
+  ) then
+    raise exception 'Product is not available in this zone' using errcode = 'check_violation';
+  end if;
+
+  select * into z from public.zones where id = new.zone_id;
+  -- Small tolerance so floating-point noise at the exact edge matches the app's check.
+  if public.haversine_km(new.lat, new.lng, z.center_lat, z.center_lng) > z.radius_km + 1e-9 then
+    raise exception 'Address is outside the assigned zone' using errcode = 'check_violation';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists orders_validate on public.orders;
+create trigger orders_validate
+  before insert or update on public.orders
+  for each row execute function public.validate_order();
