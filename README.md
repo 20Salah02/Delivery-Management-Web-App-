@@ -9,7 +9,7 @@ An order is only accepted if its address falls inside a zone where the product i
 
 | Email | Password |
 | --- | --- |
-| `test@quickdrop.app` | `[password]` |
+| `test@quickdrop.app` | `Test1234!` |
 
 The test account comes pre-filled with demo data (3 Casablanca zones, 5 products, 5 orders) from `supabase/seed.sql`.
 
